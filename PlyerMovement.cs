@@ -29,8 +29,8 @@ public class PlyerMovement : MonoBehaviour
     {
         if (GameManager.GameStop) return;
 
-        float h = Input.GetAxisRaw("Horizontal"); // ÁÂ:-1 , ¿ì:1
-        float v = Input.GetAxisRaw("Vertical"); //ÇÏ:-1 , »ó:1
+        float h = Input.GetAxisRaw("Horizontal"); // ì¢Œ:-1 , ìš°:1
+        float v = Input.GetAxisRaw("Vertical"); //í•˜:-1 , ìƒ:1
 
         if(!camerachange.change) Move(h,v); 
         else if(camerachange.change) Move2(h, v);
@@ -43,44 +43,44 @@ public class PlyerMovement : MonoBehaviour
 
     void Animating(float h , float v)
     {
-        bool walking = (h != 0f) || (v != 0f); // ÀÌµ¿ ÁßÀÎ »óÅÂ¶ó¸é 
-        anim.SetBool("Isworking", walking); // °È´Â ¾Ö´Ï¸ŞÀÌ¼Ç ½ÇÇà 
+        bool walking = (h != 0f) || (v != 0f); // ì´ë™ ì¤‘ì¸ ìƒíƒœë¼ë©´ 
+        anim.SetBool("Isworking", walking); // ê±·ëŠ” ì• ë‹ˆë©”ì´ì…˜ ì‹¤í–‰ 
     }
 
 
-    void Turning()
+    void Turning() // Playerì˜ íšŒì „ì„ ë‹´ë‹¹í•˜ëŠ” í•¨ìˆ˜
     {
-        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition); // ¸¶¿ì½º À§Ä¡¿¡ ´ëÇÑ Ray
+        Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition); // ë§ˆìš°ìŠ¤ ìœ„ì¹˜ì— ëŒ€í•œ Ray
 
         RaycastHit floorHit;
 
-        // ±âÁØÁ¡ÀÌ µÇ´Â ·¹ÀÌÁ® , ·¹ÀÌÀú°¡ ´ê¾ÒÀ»¶§ Á¤º¸¸¦ ÀúÀåÇÒ ¿ÀºêÁ§Æ® , ·¹ÀÌÁ®ÀÇ ±æÀÌ , ¾î¶² ·¹ÀÌ¾î ¸¶½ºÅ©¸¦ °¨ÁöÇÒ °ÍÀÎ°¡ 
+        // ê¸°ì¤€ì ì´ ë˜ëŠ” ë ˆì´ì ¸ , ë ˆì´ì €ê°€ ë‹¿ì•˜ì„ë•Œ ì •ë³´ë¥¼ ì €ì¥í•  ì˜¤ë¸Œì íŠ¸ , ë ˆì´ì ¸ì˜ ê¸¸ì´ , ì–´ë–¤ ë ˆì´ì–´ ë§ˆìŠ¤í¬ë¥¼ ê°ì§€í•  ê²ƒì¸ê°€ 
         if (Physics.Raycast(camRay, out floorHit, camRayLength , floorMask)) 
         {
-            Vector3 playerToMouse = floorHit.point - transform.position; // playerToMouse´Â Player°¡ ¸¶¿ì½º°¡ ÀÖ´Â À§Ä¡(floorMask°¡ ÀÖ´Â °æ¿ì¿¡¸¸)ÀÇ ¹æÇâ
+            Vector3 playerToMouse = floorHit.point - transform.position; // playerToMouseëŠ” Playerê°€ ë§ˆìš°ìŠ¤ê°€ ìˆëŠ” ìœ„ì¹˜(floorMaskê°€ ìˆëŠ” ê²½ìš°ì—ë§Œ)ì˜ ë°©í–¥
             playerToMouse.y = 0f;
 
-            Quaternion newPos = Quaternion.LookRotation(playerToMouse); // È¸Àü °ªÀ» º¯°æÇÏ±â À§ÇØ Quaternion ÇüÅÂ·Î ¼±¾ğ , newPos´Â ÇöÀç ¸¶¿ì½º ¹æÇâ¿¡ ´ëÇÑ È¸Àü°ª
-            playerRb.MoveRotation(newPos); // Rigidbody.MoveRotation¸¦ ÀÌ¿ëÇØ È¸Àü°ªÀ» º¯°æ
+            Quaternion newPos = Quaternion.LookRotation(playerToMouse); // íšŒì „ ê°’ì„ ë³€ê²½í•˜ê¸° ìœ„í•´ Quaternion í˜•íƒœë¡œ ì„ ì–¸ , newPosëŠ” í˜„ì¬ ë§ˆìš°ìŠ¤ ë°©í–¥ì— ëŒ€í•œ íšŒì „ê°’
+            playerRb.MoveRotation(newPos); // Rigidbody.MoveRotationë¥¼ ì´ìš©í•´ íšŒì „ê°’ì„ ë³€ê²½
 
         }
 
     }
 
-    void Move(float h , float v) // 3ÀÎÄª ÀÌµ¿¹æ¹ı
+    void Move(float h , float v) // 3ì¸ì¹­ ì´ë™ë°©ë²•
     {
-        // Àü´Ş µÈ °ª¿¡ µû¶ó¼­ vectorÀÇ ¹æÇâÀ» Á¤ÇÑ´Ù
+        // ì „ë‹¬ ëœ ê°’ì— ë”°ë¼ì„œ vectorì˜ ë°©í–¥ì„ ì •í•œë‹¤
          movement.Set(h, 0f, v);
         
-        // ¸ğµç ¹æÇâ¿¡ ´ëÇØ Å©±â¸¦ '1'·Î ¸¸µé°í (normalized)
-        // verctorÀÇ Å©±â¸¦ Á¤ÇÑ´Ù
+        // ëª¨ë“  ë°©í–¥ì— ëŒ€í•´ í¬ê¸°ë¥¼ '1'ë¡œ ë§Œë“¤ê³  (normalized)
+        // verctorì˜ í¬ê¸°ë¥¼ ì •í•œë‹¤
         movement = movement.normalized * speed * Time.deltaTime;
 
-        // vectorÀÇ Å©±â¿Í ¹æÇâÀÌ °áÁ¤ÀÌ µÇ¾úÀ¸´Ï , ´ÙÀ½ ÇÁ·¹ÀÓ¿¡¼­ À§Ä¡¸¦ Á¤ÇÑ´Ù.
+        // vectorì˜ í¬ê¸°ì™€ ë°©í–¥ì´ ê²°ì •ì´ ë˜ì—ˆìœ¼ë‹ˆ , ë‹¤ìŒ í”„ë ˆì„ì—ì„œ ìœ„ì¹˜ë¥¼ ì •í•œë‹¤.
         playerRb.MovePosition(transform.position + movement);
     }
 
-    void Move2(float h, float v) // 1ÀÎÄª ÀÌµ¿ ¹æ¹ı
+    void Move2(float h, float v) // 1ì¸ì¹­ ì´ë™ ë°©ë²•
     {
         movement = (transform.forward * v + transform.right * h) * speed * Time.deltaTime;
 
